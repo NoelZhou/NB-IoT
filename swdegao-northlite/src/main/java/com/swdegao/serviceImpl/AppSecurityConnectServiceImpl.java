@@ -2,6 +2,8 @@ package com.swdegao.serviceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.alibaba.fastjson.JSON;
 import com.huawei.iotplatform.client.NorthApiClient;
 import com.huawei.iotplatform.client.NorthApiException;
 import com.huawei.iotplatform.client.dto.AuthOutDTO;
@@ -10,6 +12,7 @@ import com.huawei.iotplatform.client.dto.AuthRefreshOutDTO;
 import com.huawei.iotplatform.client.dto.ClientInfo;
 import com.huawei.iotplatform.client.invokeapi.Authentication;
 import com.swdegao.common.ApplicationConfig;
+import com.swdegao.common.UpDateProperty;
 import com.swdegao.service.AppSecurityConnectService;
 @Component
 public class AppSecurityConnectServiceImpl implements AppSecurityConnectService{
@@ -19,30 +22,36 @@ public class AppSecurityConnectServiceImpl implements AppSecurityConnectService{
 	
 	@Override
 	public AuthOutDTO getAuthToken() throws NorthApiException {
-		Authentication auth = initAPIClient();
+		Authentication auth = initAuth();
+		System.out.println(JSON.toJSON(auth));
 	    AuthOutDTO aod = auth.getAuthToken();
+	    UpDateProperty.updateProperties("app.accessToken", aod.getAccessToken());
+	    UpDateProperty.updateProperties("app.refreshToken", aod.getRefreshToken());
 		return aod;
 	}
 
 	@Override
-	public AuthRefreshOutDTO refreshAuthToken(String refeshToken) throws NorthApiException {
-		Authentication auth = initAPIClient();
+	public AuthRefreshOutDTO refreshAuthToken() throws NorthApiException {
+		Authentication auth = initAuth();
+		System.out.println(JSON.toJSON(auth));
 		AuthRefreshInDTO arid = new AuthRefreshInDTO(); 
 	    AuthRefreshOutDTO arod = null;
         arid.setAppId(appConfig.getAppId());
         arid.setSecret(appConfig.getSecret());
-//        String refreshToken = getAuthToken().getRefreshToken();
-        arid.setRefreshToken(refeshToken);
         
+        String refreshToken = UpDateProperty.getKeyValue("app.refreshToken");
+        arid.setRefreshToken(refreshToken);
         arod = auth.refreshAuthToken(arid);
-        
+        UpDateProperty.updateProperties("app.accessToken", arod.getAccessToken());
+	    UpDateProperty.updateProperties("app.refreshToken", arod.getRefreshToken());
 		return arod;
 	}
 
 	@Override
-	public void logout() throws NorthApiException {
-		Authentication auth = initAPIClient();
-		auth.logoutAuthToken(refreshAuthToken(null).getAccessToken());
+	public void logout() throws NorthApiException  {
+		Authentication auth= initAuth();
+		String accessToken = UpDateProperty.getKeyValue("app.accessToken");
+		auth.logoutAuthToken(accessToken);
 	}
 	
 	/**
@@ -50,7 +59,13 @@ public class AppSecurityConnectServiceImpl implements AppSecurityConnectService{
 	 * @return
 	 * @throws NorthApiException
 	 */
-	private Authentication initAPIClient() throws NorthApiException {
+	public Authentication initAuth() throws NorthApiException {
+		
+		Authentication auth = new Authentication(initClient());
+		return auth;
+	}
+	
+	public NorthApiClient initClient() throws NorthApiException {
 		/**
 		 * 北向API入口
 		 */
@@ -71,8 +86,6 @@ public class AppSecurityConnectServiceImpl implements AppSecurityConnectService{
 		 * 初始化SSL
 		 */
 		northApiClient.initSSLConfig();
-		Authentication auth = new Authentication(northApiClient);
-		return auth;
+		return northApiClient;
 	}
-
 }

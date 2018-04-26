@@ -19,6 +19,8 @@ public class ApplicationConfig{
     private String secret;
     private String base_url;
     private String port;
+    private String accessToken;
+    private String refreshToken;
 	
     public String getAppId() {
 		return appId;
@@ -44,7 +46,18 @@ public class ApplicationConfig{
 	public void setPort(String port) {
 		this.port = port;
 	}
-    
+	public String getRefreshToken() {
+		return refreshToken;
+	}
+	public void setRefreshToken(String refreshToken) {
+		this.refreshToken = refreshToken;
+	}
+	public String getAccessToken() {
+		return accessToken;
+	}
+	public void setAccessToken(String accessToken) {
+		this.accessToken = accessToken;
+	} 
     
     
 }
