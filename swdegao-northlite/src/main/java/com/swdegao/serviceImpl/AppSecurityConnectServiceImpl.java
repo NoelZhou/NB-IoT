@@ -25,14 +25,14 @@ public class AppSecurityConnectServiceImpl implements AppSecurityConnectService{
 	}
 
 	@Override
-	public AuthRefreshOutDTO refreshAuthToken() throws NorthApiException {
+	public AuthRefreshOutDTO refreshAuthToken(String refeshToken) throws NorthApiException {
 		Authentication auth = initAPIClient();
 		AuthRefreshInDTO arid = new AuthRefreshInDTO(); 
 	    AuthRefreshOutDTO arod = null;
         arid.setAppId(appConfig.getAppId());
         arid.setSecret(appConfig.getSecret());
-        String refreshToken = getAuthToken().getRefreshToken();
-        arid.setRefreshToken(refreshToken);
+//        String refreshToken = getAuthToken().getRefreshToken();
+        arid.setRefreshToken(refeshToken);
         
         arod = auth.refreshAuthToken(arid);
         
@@ -42,7 +42,7 @@ public class AppSecurityConnectServiceImpl implements AppSecurityConnectService{
 	@Override
 	public void logout() throws NorthApiException {
 		Authentication auth = initAPIClient();
-		auth.logoutAuthToken(refreshAuthToken().getAccessToken());
+		auth.logoutAuthToken(refreshAuthToken(null).getAccessToken());
 	}
 	
 	/**

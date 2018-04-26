@@ -17,11 +17,12 @@ public interface AppSecurityConnectService {
 	public AuthOutDTO getAuthToken() throws NorthApiException;
 	/**
 	 * 刷新accessToken
+	 * @param refeshToken 
 	 * @param arid
 	 * @return
 	 * @throws NorthApiException
 	 */
-	public AuthRefreshOutDTO refreshAuthToken() throws NorthApiException;
+	public AuthRefreshOutDTO refreshAuthToken(String refeshToken) throws NorthApiException;
 	/**
 	 * 注销鉴权信息
 	 * @param accessToken
