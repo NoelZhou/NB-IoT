@@ -1,10 +1,12 @@
 package com.swdegao.service;
 
+import org.springframework.stereotype.Component;
+
 import com.huawei.iotplatform.client.NorthApiException;
 import com.huawei.iotplatform.client.dto.QueryDataHistoryOutDTO;
 import com.huawei.iotplatform.client.dto.QueryDeviceCapabilitiesOutDTO;
 import com.huawei.iotplatform.client.dto.QueryDeviceDataOutDTO;
-
+@Component
 public interface DataCollectionService {
 	/**
 	 * 查询单个设备信息

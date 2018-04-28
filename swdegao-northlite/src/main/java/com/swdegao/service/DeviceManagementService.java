@@ -1,10 +1,12 @@
 package com.swdegao.service;
 
+import org.springframework.stereotype.Component;
+
 import com.huawei.iotplatform.client.NorthApiException;
 import com.huawei.iotplatform.client.dto.ModifyDeviceInfoInDTO;
 import com.huawei.iotplatform.client.dto.RefreshVerifyCodeOutDTO;
 import com.huawei.iotplatform.client.dto.RegDirectDeviceOutDTO;
-
+@Component
 public interface DeviceManagementService {
 	/**
 	 * 注册直连设备
