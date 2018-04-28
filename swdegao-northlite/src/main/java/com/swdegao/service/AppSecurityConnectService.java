@@ -1,11 +1,9 @@
 package com.swdegao.service;
 
 import org.springframework.stereotype.Component;
-
 import com.huawei.iotplatform.client.NorthApiException;
 import com.huawei.iotplatform.client.dto.AuthOutDTO;
 import com.huawei.iotplatform.client.dto.AuthRefreshOutDTO;
-import com.huawei.iotplatform.client.invokeapi.Authentication;
 
 @Component
 public interface AppSecurityConnectService {
