@@ -15,7 +15,7 @@ import com.huawei.iotplatform.client.dto.RegDirectDeviceOutDTO;
 import com.swdegao.service.DeviceManagementService;
 
 @RestController
-@RequestMapping(value = "/rest")
+@RequestMapping(value = "/deviceManagement")
 public class DeviceManagementController {
 
 	@Autowired
