@@ -2,6 +2,7 @@ package com.swdegao.service;
 
 import com.huawei.iotplatform.client.NorthApiException;
 import com.huawei.iotplatform.client.dto.ModifyDeviceInfoInDTO;
+import com.huawei.iotplatform.client.dto.QueryDeviceStatusOutDTO;
 import com.huawei.iotplatform.client.dto.RefreshVerifyCodeInDTO;
 import com.huawei.iotplatform.client.dto.RefreshVerifyCodeOutDTO;
 import com.huawei.iotplatform.client.dto.RegDirectDeviceInDTO;
@@ -14,7 +15,7 @@ public interface DeviceManagementService {
 	 * @return
 	 * @throws NorthApiException
 	 */
-	public RegDirectDeviceOutDTO regDirectDevice(RegDirectDeviceInDTO rddid) throws NorthApiException;
+	public RegDirectDeviceOutDTO regDirectDevice(String nodeId) throws NorthApiException;
 	/**
 	 * 删除直连设备
 	 * @param deviceId
@@ -32,5 +33,5 @@ public interface DeviceManagementService {
 	 * @return
 	 * @throws NorthApiException
 	 */
-	public RefreshVerifyCodeOutDTO refreshDeviceSecret(RefreshVerifyCodeInDTO rdsid) throws NorthApiException;
+	public RefreshVerifyCodeOutDTO refreshDeviceSecret(String deviceId,String nodeId) throws NorthApiException;
 }

@@ -2,8 +2,6 @@ package com.swdegao.serviceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import com.alibaba.fastjson.JSON;
 import com.huawei.iotplatform.client.NorthApiClient;
 import com.huawei.iotplatform.client.NorthApiException;
 import com.huawei.iotplatform.client.dto.AuthOutDTO;
@@ -23,7 +21,6 @@ public class AppSecurityConnectServiceImpl implements AppSecurityConnectService{
 	@Override
 	public AuthOutDTO getAuthToken() throws NorthApiException {
 		Authentication auth = initAuth();
-		System.out.println(JSON.toJSON(auth));
 	    AuthOutDTO aod = auth.getAuthToken();
 	    UpDateProperty.updateProperties("app.accessToken", aod.getAccessToken());
 	    UpDateProperty.updateProperties("app.refreshToken", aod.getRefreshToken());
@@ -33,7 +30,6 @@ public class AppSecurityConnectServiceImpl implements AppSecurityConnectService{
 	@Override
 	public AuthRefreshOutDTO refreshAuthToken() throws NorthApiException {
 		Authentication auth = initAuth();
-		System.out.println(JSON.toJSON(auth));
 		AuthRefreshInDTO arid = new AuthRefreshInDTO(); 
 	    AuthRefreshOutDTO arod = null;
         arid.setAppId(appConfig.getAppId());

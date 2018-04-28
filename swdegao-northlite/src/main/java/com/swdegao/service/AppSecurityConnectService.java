@@ -1,6 +1,8 @@
 package com.swdegao.service;
 
 import org.springframework.stereotype.Component;
+
+import com.huawei.iotplatform.client.NorthApiClient;
 import com.huawei.iotplatform.client.NorthApiException;
 import com.huawei.iotplatform.client.dto.AuthOutDTO;
 import com.huawei.iotplatform.client.dto.AuthRefreshOutDTO;
@@ -28,4 +30,6 @@ public interface AppSecurityConnectService {
 	 * @throws NorthApiException
 	 */
 	public void logout() throws NorthApiException;
+	
+	public NorthApiClient initClient() throws NorthApiException;
 }
