@@ -2,13 +2,10 @@ package com.swdegao.service;
 
 import org.springframework.stereotype.Component;
 import com.huawei.iotplatform.client.NorthApiException;
-import com.huawei.iotplatform.client.dto.DeviceCmdCancelTaskInDTO;
 import com.huawei.iotplatform.client.dto.DeviceCmdCancelTaskOutDTO;
 import com.huawei.iotplatform.client.dto.PostDeviceCommandInDTO;
 import com.huawei.iotplatform.client.dto.PostDeviceCommandOutDTO;
-import com.huawei.iotplatform.client.dto.QueryDeviceCmdCancelTaskInDTO;
 import com.huawei.iotplatform.client.dto.QueryDeviceCmdCancelTaskOutDTO;
-import com.huawei.iotplatform.client.dto.QueryDeviceCommandInDTO;
 import com.huawei.iotplatform.client.dto.QueryDeviceCommandOutDTO;
 import com.huawei.iotplatform.client.dto.UpdateDeviceCmdInDTO;
 import com.huawei.iotplatform.client.dto.UpdateDeviceCmdOutDTO;
@@ -32,7 +29,7 @@ public interface SigtranService {
 	 * @return
 	 * @throws NorthApiException
 	 */
-	public QueryDeviceCommandOutDTO queryDeviceCommand(QueryDeviceCommandInDTO qdcid) throws NorthApiException;
+	public QueryDeviceCommandOutDTO queryDeviceCommand(String deviceId) throws NorthApiException;
 	
 	/**
 	 * //修改该设备命令V4
@@ -48,7 +45,7 @@ public interface SigtranService {
 	 * @return
 	 * @throws NorthApiException
 	 */
-	public DeviceCmdCancelTaskOutDTO createDeviceCmdCancelTaskV4(DeviceCmdCancelTaskInDTO dcctod)throws NorthApiException;
+	public DeviceCmdCancelTaskOutDTO createDeviceCmdCancelTaskV4(String deviceId)throws NorthApiException;
 	
 	/**
 	 * //查询设备命令撤销任务V4
@@ -56,7 +53,7 @@ public interface SigtranService {
 	 * @return
 	 * @throws NorthApiException
 	 */
-	public QueryDeviceCmdCancelTaskOutDTO queryDeviceCmdCancelTask(QueryDeviceCmdCancelTaskInDTO qdcctid)throws NorthApiException;
+	public QueryDeviceCmdCancelTaskOutDTO queryDeviceCmdCancelTask(String deviceId)throws NorthApiException;
 }
 
 
