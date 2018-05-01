@@ -3,6 +3,7 @@ package com.swdegao.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,6 +12,7 @@ import com.huawei.iotplatform.client.NorthApiException;
 import com.huawei.iotplatform.client.dto.QueryDataHistoryOutDTO;
 import com.huawei.iotplatform.client.dto.QueryDeviceCapabilitiesOutDTO;
 import com.huawei.iotplatform.client.dto.QueryDeviceDataOutDTO;
+import com.huawei.iotplatform.client.dto.SubscribeInDTO;
 import com.swdegao.service.DataCollectionService;
 
 
@@ -35,9 +37,9 @@ public class DataCollectionController {
 		}
 		return obj;
 	}
-	@GetMapping("/subscribeNotify/deviceDataChanged")
-	public void subscribeNotify() throws NorthApiException {
-		dcService.subscribeNotify();
+	@PostMapping("/subscribeNotify")
+	public void subscribeNotify(SubscribeInDTO sid) throws NorthApiException {
+		dcService.subscribeNotify(sid);
 	}
 	
 	@GetMapping("/queryDataHistory/{deviceId}&{gatewayId}")

@@ -34,13 +34,13 @@ public class DataCollectionServiceImpl implements DataCollectionService {
 	}
 
 	@Override
-	public void subscribeNotify() throws NorthApiException {
+	public void subscribeNotify(SubscribeInDTO sid) throws NorthApiException {
 		DataCollection dc = new DataCollection(appService.initClient());
-        SubscribeInDTO sid = new SubscribeInDTO();
-        String notifyType = "deviceDataChanged";
-        sid.setNotifyType(notifyType);
-        String callbackurl = "http://localhost:8080/RESTfulWS/rest/UserInfoService/subscriber1";
-        sid.setCallbackurl(callbackurl);
+//        SubscribeInDTO sid = new SubscribeInDTO();
+//        String notifyType = "deviceDataChanged";
+//        sid.setNotifyType(notifyType);
+//        String callbackurl = "http://localhost:8080/RESTfulWS/rest/UserInfoService/subscriber1";
+//        sid.setCallbackurl(callbackurl);
         dc.subscribeNotify(sid, accessToken);
 	}
 

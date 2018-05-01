@@ -6,6 +6,7 @@ import com.huawei.iotplatform.client.NorthApiException;
 import com.huawei.iotplatform.client.dto.QueryDataHistoryOutDTO;
 import com.huawei.iotplatform.client.dto.QueryDeviceCapabilitiesOutDTO;
 import com.huawei.iotplatform.client.dto.QueryDeviceDataOutDTO;
+import com.huawei.iotplatform.client.dto.SubscribeInDTO;
 @Component
 public interface DataCollectionService {
 	/**
@@ -19,7 +20,7 @@ public interface DataCollectionService {
 	 * @param sid
 	 * @throws NorthApiException
 	 */
-	public void subscribeNotify()throws NorthApiException;
+	public void subscribeNotify(SubscribeInDTO sid)throws NorthApiException;
 	/**
 	 * 查询设备历史数据
 	 * @param qdhid
