@@ -21,9 +21,9 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class UpDateProperty {
-	
+
     //属性文件的路径   
-    static String profilepath="D:\\\\南通德高\\\\NB-IoT\\\\swdegao-northlite\\\\src\\\\main\\\\resources\\\\config.properties";   
+    static String profilepath=System.getProperty("user.dir")+"\\src\\main\\resources\\config.properties";   
     /**
     * 采用静态方法 
     */
