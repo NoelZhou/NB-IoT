@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.alibaba.fastjson.JSON;
 import com.huawei.iotplatform.client.NorthApiException;
+import com.swdegao.common.ResponseMessage;
 import com.swdegao.service.AppSecurityConnectService;
 
 @RestController
@@ -16,24 +16,13 @@ public class AppSecurityConnectController {
 	public AppSecurityConnectService appConnectService;
 	
 	@GetMapping("/getAuthToken")
-	public Object login(){
-		Object obj=null;
-		try {
-			obj = JSON.toJSON(appConnectService.getAuthToken());
-		} catch (NorthApiException e) {
-			obj = e.toString();
-		}
-		return obj;
+	public ResponseMessage login(){
+		return appConnectService.getAuthToken();
 	}
+	
 	@GetMapping("/refreshToken")
-	public Object substributeNotfiy(){
-		Object obj=null;
-		try {
-			obj = JSON.toJSON(appConnectService.refreshAuthToken());
-		} catch (NorthApiException e) {
-			obj = e.toString();
-		}
-		return obj;
+	public ResponseMessage substributeNotfiy(){
+		return appConnectService.refreshAuthToken();
 	}
 	
 	@GetMapping("/logout")

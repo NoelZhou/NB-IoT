@@ -11,6 +11,8 @@ import com.huawei.iotplatform.client.dto.RegDirectDeviceInDTO;
 import com.huawei.iotplatform.client.dto.RegDirectDeviceOutDTO;
 import com.huawei.iotplatform.client.invokeapi.DeviceManagement;
 import com.swdegao.common.ApplicationConfig;
+import com.swdegao.common.ResponseMessage;
+import com.swdegao.common.ResponseUtils;
 import com.swdegao.common.UpDateProperty;
 import com.swdegao.service.AppSecurityConnectService;
 import com.swdegao.service.DeviceManagementService;
@@ -26,18 +28,21 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
 	public String accessToken = UpDateProperty.getKeyValue("app.accessToken");
 	
 	@Override
-	public RegDirectDeviceOutDTO regDirectDevice(String nodeId) throws NorthApiException {
+	public ResponseMessage regDirectDevice(String nodeId) {
 		String appId = appConfig.getAppId();
-        DeviceManagement dManagement = new DeviceManagement(appSecurity.initClient());
-        RegDirectDeviceInDTO rddid = new RegDirectDeviceInDTO();
-        String verifyCode = nodeId;
-        rddid.setNodeId(nodeId);
-        rddid.setVerifyCode(verifyCode);
-        rddid.setTimeout(0);
-        RegDirectDeviceOutDTO rddod = null;
-        rddod = dManagement.regDirectDevice(rddid,appId,accessToken);
-        return rddod;
-
+        try {
+        	 DeviceManagement dManagement = new DeviceManagement(appSecurity.initClient());
+             RegDirectDeviceInDTO rddid = new RegDirectDeviceInDTO();
+             String verifyCode = nodeId;
+             rddid.setNodeId(nodeId);
+             rddid.setVerifyCode(verifyCode);
+             rddid.setTimeout(0);
+             RegDirectDeviceOutDTO rddod = null;
+             rddod = dManagement.regDirectDevice(rddid,appId,accessToken);
+             return ResponseUtils.responseSuccessed(rddod);
+		} catch (NorthApiException e) {
+			return ResponseUtils.responseFailed(e);
+		}
 	}
 
 	@Override
@@ -55,18 +60,21 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
 	}
 
 	@Override
-	public RefreshVerifyCodeOutDTO refreshDeviceSecret(String deviceId,String nodeId)
-			throws NorthApiException {
+	public ResponseMessage refreshDeviceSecret(String deviceId,String nodeId) {
 		String appId = appConfig.getAppId();
-		DeviceManagement dManagement = new DeviceManagement(appSecurity.initClient());
-		RefreshVerifyCodeInDTO rdsid = new RefreshVerifyCodeInDTO();
-		rdsid.setDeviceId(deviceId);
-		RefreshVerifyCodeDTO request = new RefreshVerifyCodeDTO();
-		request.setNodeId(nodeId);
-		request.setVerifyCode(nodeId);
-		rdsid.setRequest(request);
-		RefreshVerifyCodeOutDTO rdsod = dManagement.refreshDeviceSecret(rdsid, appId, accessToken); 
-		return rdsod;
+		try {
+			DeviceManagement dManagement = new DeviceManagement(appSecurity.initClient());
+			RefreshVerifyCodeInDTO rdsid = new RefreshVerifyCodeInDTO();
+			rdsid.setDeviceId(deviceId);
+			RefreshVerifyCodeDTO request = new RefreshVerifyCodeDTO();
+			request.setNodeId(nodeId);
+			request.setVerifyCode(nodeId);
+			rdsid.setRequest(request);
+			RefreshVerifyCodeOutDTO rdsod = dManagement.refreshDeviceSecret(rdsid, appId, accessToken); 
+			return ResponseUtils.responseSuccessed(rdsod);
+		} catch (NorthApiException e) {
+			return ResponseUtils.responseFailed(e);
+		}
 	}
 }
 

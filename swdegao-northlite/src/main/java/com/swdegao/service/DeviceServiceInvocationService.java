@@ -2,7 +2,7 @@ package com.swdegao.service;
 
 import com.huawei.iotplatform.client.NorthApiException;
 import com.huawei.iotplatform.client.dto.DeviceServiceInvocationInDTO;
-import com.huawei.iotplatform.client.dto.DeviceServiceInvocationOutDTO;
+import com.swdegao.common.ResponseMessage;
 
 public interface DeviceServiceInvocationService {
 	
@@ -12,5 +12,5 @@ public interface DeviceServiceInvocationService {
 	 * @return
 	 * @throws NorthApiException
 	 */
-	public DeviceServiceInvocationOutDTO invocateDeviceService(DeviceServiceInvocationInDTO dsiid)throws NorthApiException;
+	public ResponseMessage invocateDeviceService(DeviceServiceInvocationInDTO dsiid);
 }

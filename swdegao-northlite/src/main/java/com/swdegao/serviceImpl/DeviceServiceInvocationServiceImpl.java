@@ -7,6 +7,8 @@ import com.huawei.iotplatform.client.dto.DeviceServiceInvocationInDTO;
 import com.huawei.iotplatform.client.dto.DeviceServiceInvocationOutDTO;
 import com.huawei.iotplatform.client.invokeapi.DeviceServiceInvocation;
 import com.swdegao.common.ApplicationConfig;
+import com.swdegao.common.ResponseMessage;
+import com.swdegao.common.ResponseUtils;
 import com.swdegao.common.UpDateProperty;
 import com.swdegao.service.AppSecurityConnectService;
 import com.swdegao.service.DeviceServiceInvocationService;
@@ -22,27 +24,15 @@ public class DeviceServiceInvocationServiceImpl implements DeviceServiceInvocati
 	public String accessToken = UpDateProperty.getKeyValue("app.accessToken");
 
 	@Override
-	public DeviceServiceInvocationOutDTO invocateDeviceService(DeviceServiceInvocationInDTO dsiid)
-			throws NorthApiException {
+	public ResponseMessage invocateDeviceService(DeviceServiceInvocationInDTO dsiid) {
 		String appId = appConfig.getAppId();
-		DeviceServiceInvocation dsi = new DeviceServiceInvocation(appService.initClient());
-		// DeviceServiceInvocationInDTO dsiid = new DeviceServiceInvocationInDTO();
-		// dsiid.setDeviceId(gate_deviceId);
-		// dsiid.setServiceId(serviceId);
-		// CommandDTO message = new CommandDTO();
-		// CommandNA2CloudHeader header = new CommandNA2CloudHeader();
-		// header.setMode("ACK");
-		// header.setMethod("SET_REPORT_PERIOD_BATTERY");
-		// header.setToType("GATEWAY");
-		// header.setCallbackURL("http://172.31.126.82:8443/RESTfulWS/rest/UserInfoService/subscriber1");
-		// Map<String, Integer> commandNA2CloudBody = new HashMap<>();
-		// commandNA2CloudBody.put("Period", 100);
-		// ObjectNode body = JsonUtil.convertObject2ObjectNode(commandNA2CloudBody);
-		// message.setBody(body);
-		// message.setHeader(header);
-		// dsiid.setMessage(message);
-		DeviceServiceInvocationOutDTO dsiod = dsi.invocateDeviceService(dsiid, appId, accessToken);
-		return dsiod;
+		try {
+			DeviceServiceInvocation dsi = new DeviceServiceInvocation(appService.initClient());
+			DeviceServiceInvocationOutDTO dsiod = dsi.invocateDeviceService(dsiid, appId, accessToken);
+			return ResponseUtils.responseSuccessed(dsiod);
+		} catch (NorthApiException e) {
+			return ResponseUtils.responseFailed(e);
+		}
 	}
 
 }

@@ -1,11 +1,9 @@
 package com.swdegao.service;
 
 import org.springframework.stereotype.Component;
-
 import com.huawei.iotplatform.client.NorthApiClient;
 import com.huawei.iotplatform.client.NorthApiException;
-import com.huawei.iotplatform.client.dto.AuthOutDTO;
-import com.huawei.iotplatform.client.dto.AuthRefreshOutDTO;
+import com.swdegao.common.ResponseMessage;
 
 @Component
 public interface AppSecurityConnectService {
@@ -15,7 +13,7 @@ public interface AppSecurityConnectService {
 	 * @return
 	 * @throws NorthApiException
 	 */
-	public AuthOutDTO getAuthToken() throws NorthApiException;
+	public ResponseMessage getAuthToken();
 	/**
 	 * 刷新accessToken
 	 * @param refeshToken 
@@ -23,7 +21,7 @@ public interface AppSecurityConnectService {
 	 * @return
 	 * @throws NorthApiException
 	 */
-	public AuthRefreshOutDTO refreshAuthToken() throws NorthApiException;
+	public ResponseMessage refreshAuthToken() ;
 	/**
 	 * 注销鉴权信息
 	 * @param accessToken

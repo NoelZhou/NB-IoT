@@ -1,11 +1,9 @@
 package com.swdegao.service;
 
 import org.springframework.stereotype.Component;
-
 import com.huawei.iotplatform.client.NorthApiException;
 import com.huawei.iotplatform.client.dto.ModifyDeviceInfoInDTO;
-import com.huawei.iotplatform.client.dto.RefreshVerifyCodeOutDTO;
-import com.huawei.iotplatform.client.dto.RegDirectDeviceOutDTO;
+import com.swdegao.common.ResponseMessage;
 @Component
 public interface DeviceManagementService {
 	/**
@@ -14,7 +12,7 @@ public interface DeviceManagementService {
 	 * @return
 	 * @throws NorthApiException
 	 */
-	public RegDirectDeviceOutDTO regDirectDevice(String nodeId) throws NorthApiException;
+	public ResponseMessage regDirectDevice(String nodeId) ;
 	/**
 	 * 删除直连设备
 	 * @param deviceId
@@ -32,5 +30,5 @@ public interface DeviceManagementService {
 	 * @return
 	 * @throws NorthApiException
 	 */
-	public RefreshVerifyCodeOutDTO refreshDeviceSecret(String deviceId,String nodeId) throws NorthApiException;
+	public ResponseMessage refreshDeviceSecret(String deviceId,String nodeId);
 }

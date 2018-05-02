@@ -7,11 +7,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import com.alibaba.fastjson.JSON;
 import com.huawei.iotplatform.client.NorthApiException;
 import com.huawei.iotplatform.client.dto.ModifyDeviceInfoInDTO;
-import com.huawei.iotplatform.client.dto.RefreshVerifyCodeOutDTO;
-import com.huawei.iotplatform.client.dto.RegDirectDeviceOutDTO;
+import com.swdegao.common.ResponseMessage;
 import com.swdegao.service.DeviceManagementService;
 
 @RestController
@@ -22,34 +20,13 @@ public class DeviceManagementController {
 	public DeviceManagementService dmService;
 
 	@GetMapping("/regDirectDevice/{nodeId}")
-	public Object regDirectDevice(@PathVariable String nodeId) {
-		Object obj = null;
-		if (nodeId != null) {
-			RegDirectDeviceOutDTO rddod = null;
-			try {
-				rddod = dmService.regDirectDevice(nodeId);
-				if (rddod != null) {
-					obj = JSON.toJSON(rddod);
-				}
-			} catch (NorthApiException e) {
-				obj = e.toString();
-			}
-		} else {
-			obj = "redirect:/error";
-		}
-		return obj;
+	public ResponseMessage regDirectDevice(@PathVariable String nodeId) {
+		return dmService.regDirectDevice(nodeId);
 	}
 
 	@GetMapping("/deleteDirectDevice/{deviceId}")
-	public Object deleteDirectDevice(@PathVariable String deviceId) {
-		Object obj = null;
-		try {
-			dmService.deleteDirectDevice(deviceId);
-			obj = "No Content";
-		} catch (NorthApiException e) {
-			obj = e.toString();
-		}
-		return obj;
+	public void deleteDirectDevice(@PathVariable String deviceId) throws NorthApiException{
+		dmService.deleteDirectDevice(deviceId);
 	}
 
 	/**
@@ -64,28 +41,13 @@ public class DeviceManagementController {
 	 * @return
 	 */
 	@RequestMapping(value = "/modifyDeviceInfo", method = { RequestMethod.POST, RequestMethod.GET })
-	public Object modifyDeviceInfo(@RequestBody ModifyDeviceInfoInDTO mdiid) {
-		Object obj = null;
-		try {
-			dmService.modifyDeviceInfo(mdiid);
-			obj = "No Content";
-		} catch (NorthApiException e) {
-			obj = e.toString();
-		}
-		return obj;
+	public void modifyDeviceInfo(@RequestBody ModifyDeviceInfoInDTO mdiid) throws NorthApiException {
+		dmService.modifyDeviceInfo(mdiid);
 	}
 
 	@GetMapping("/refreshDeviceSecret/{deviceId}&{nodeId}")
-	public Object refreshDeviceSecret(@PathVariable String deviceId, @PathVariable String nodeId) {
-		Object obj = null;
-		RefreshVerifyCodeOutDTO rdsod = null;
-		try {
-			rdsod = dmService.refreshDeviceSecret(deviceId, nodeId);
-			obj = JSON.toJSON(rdsod);
-		} catch (NorthApiException e) {
-			obj = e.toString();
-		}
-		return obj;
+	public ResponseMessage refreshDeviceSecret(@PathVariable String deviceId, @PathVariable String nodeId) {
+		return dmService.refreshDeviceSecret(deviceId, nodeId);
 	}
 
 }

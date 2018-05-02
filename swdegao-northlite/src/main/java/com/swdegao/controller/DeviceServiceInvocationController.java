@@ -5,10 +5,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.alibaba.fastjson.JSON;
-import com.huawei.iotplatform.client.NorthApiException;
 import com.huawei.iotplatform.client.dto.DeviceServiceInvocationInDTO;
-import com.huawei.iotplatform.client.dto.DeviceServiceInvocationOutDTO;
+import com.swdegao.common.ResponseMessage;
 import com.swdegao.service.DeviceServiceInvocationService;
 
 @RestController
@@ -36,16 +34,7 @@ public class DeviceServiceInvocationController {
 	 * @return
 	 */
 	@PostMapping("/invocateDeviceService")
-	public Object invocateDeviceService(@RequestBody DeviceServiceInvocationInDTO dsiid) {
-		Object obj = null;
-		DeviceServiceInvocationOutDTO dOutDTO = null;
-		try {
-
-			dOutDTO = deviceService.invocateDeviceService(dsiid);
-			obj = JSON.toJSON(dOutDTO);
-		} catch (NorthApiException e) {
-			obj = e.toString();
-		}
-		return obj;
+	public ResponseMessage invocateDeviceService(@RequestBody DeviceServiceInvocationInDTO dsiid) {
+		return deviceService.invocateDeviceService(dsiid);
 	}
 }
