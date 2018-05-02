@@ -29,23 +29,6 @@ public class BatchProcessingServiceImpl implements BatchProcessingService {
 	@Override
 	public BatchTaskCreateOutDTO createBatchTask(BatchTaskCreateInDTO btcid) throws NorthApiException {
 		BatchProcess bp = new BatchProcess(appService.initClient());
-		// BatchTaskCreateInDTO btcid = new BatchTaskCreateInDTO();
-		// btcid.setAppId(appId);
-		// btcid.setTimeout(1000);
-		// btcid.setTaskName("TestTask");
-		// btcid.setTaskType("DeviceCmd");
-		// AsynCommandDTO command11 = new AsynCommandDTO();
-		// command11.setServiceId("Brightness");
-		// ObjectNode paras = JsonUtil.convertObject2ObjectNode("{\"value\":\"100\"}");
-		// command11.setParas(paras);
-		// command11.setMethod("SET_DEVICE_LEVEL");
-		// Map<String, Object> param11 = new HashMap<>();
-		// param11.put("type", "DeviceType");
-		// param11.put("deviceType", "WaterMeter");
-		// param11.put("manufacturerId", "CompanyId");
-		// param11.put("model", "SDKDEMO");
-		// param11.put("command", command11);
-		// btcid.setParam(JsonUtil.convertObject2ObjectNode(param11));
 		BatchTaskCreateOutDTO btcod = bp.createBatchTask(btcid, accessToken);
 		return btcod;
 	}

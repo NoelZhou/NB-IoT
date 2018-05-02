@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSON;
@@ -23,9 +24,25 @@ public class SigtranController {
 
 	@Autowired
 	public SigtranService sigtranService;
-
+	/**
+	 * Body:  
+		{ 
+		       "deviceId": "********", 
+		       "command": { 
+		               "serviceId": "********", 
+		               "method": "********", 
+		               "paras": { 
+		                       "paraName1": "paraValue1", 
+		                       "paraName2": "paraValue2"        
+		        }    
+		    }, 
+		       "callbackUrl": "https://server:port/callbackUri" 
+		} 
+	 * @param pdcid
+	 * @return
+	 */
 	@PostMapping("/postDeviceCommand")
-	public Object postDeviceCommand(PostDeviceCommandInDTO pdcid) {
+	public Object postDeviceCommand(@RequestBody PostDeviceCommandInDTO pdcid) {
 		Object obj = null;
 		PostDeviceCommandOutDTO pdcod = null;
 		try {
@@ -48,8 +65,19 @@ public class SigtranController {
 		}
 		return obj;
 	}
+	/**
+	 * 
+	    // UpdateDeviceCmdInDTO udcid = new UpdateDeviceCmdInDTO();
+		// String deviceCommandId = "bfeb4ba5c2644aae87b3188beb13539f";
+		// udcid.setDeviceCommandId(deviceCommandId);
+		// UpdateDeviceCmdReq udcr = new UpdateDeviceCmdReq();
+		// udcr.setStatus("CANCELED");
+		// udcid.setUpdateDeviceCommandReq(udcr);
+	 * @param udcid
+	 * @return
+	 */
 	@PostMapping("/updateDeviceCommand")
-	public Object updateDeviceCommand(UpdateDeviceCmdInDTO udcid) {
+	public Object updateDeviceCommand(@RequestBody UpdateDeviceCmdInDTO udcid) {
 		Object obj = null;
 		UpdateDeviceCmdOutDTO uDto = null;
 		try {

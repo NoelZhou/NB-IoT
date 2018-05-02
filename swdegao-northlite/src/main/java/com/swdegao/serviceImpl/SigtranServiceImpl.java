@@ -72,12 +72,6 @@ public class SigtranServiceImpl implements SigtranService {
 		String appId = appConfig.getAppId();
 		SignalDelivery sd = new SignalDelivery();
 		sd.setNorthApiClient(appService.initClient());
-		// UpdateDeviceCmdInDTO udcid = new UpdateDeviceCmdInDTO();
-		// String deviceCommandId = "bfeb4ba5c2644aae87b3188beb13539f";
-		// udcid.setDeviceCommandId(deviceCommandId);
-		// UpdateDeviceCmdReq udcr = new UpdateDeviceCmdReq();
-		// udcr.setStatus("CANCELED");
-		// udcid.setUpdateDeviceCommandReq(udcr);
 		UpdateDeviceCmdOutDTO udcod = sd.updateDeviceCommand(udcid, appId, accessToken);
 		return udcod;
 	}

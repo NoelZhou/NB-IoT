@@ -2,6 +2,7 @@ package com.swdegao.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSON;
@@ -15,13 +16,31 @@ import com.swdegao.service.DeviceServiceInvocationService;
 public class DeviceServiceInvocationController {
 	@Autowired
 	public DeviceServiceInvocationService deviceService;
-	
+
+	/**
+	 * Body: 
+	 * { 
+	 * "header": { 
+	 * 			 "mode": "ACK", 
+	 *			 "from": "/users/23212121", 
+	 *			 "method":"INVITE-INIT", 
+	 *			 "callbackURL":"https://186.25.1.49:8043/na/iocm/message/confirm" 
+	 * 			}, 
+	 * "body": { 
+	 * 		  	"from":"************", 
+	 * 			"sessionID": "**********", 
+	 * 			"sdp": "**********" 
+	 * 			} 
+	 * }
+	 * @param dsiid
+	 * @return
+	 */
 	@PostMapping("/invocateDeviceService")
-	public Object invocateDeviceService(DeviceServiceInvocationInDTO dsiid) {
+	public Object invocateDeviceService(@RequestBody DeviceServiceInvocationInDTO dsiid) {
 		Object obj = null;
 		DeviceServiceInvocationOutDTO dOutDTO = null;
 		try {
-			
+
 			dOutDTO = deviceService.invocateDeviceService(dsiid);
 			obj = JSON.toJSON(dOutDTO);
 		} catch (NorthApiException e) {

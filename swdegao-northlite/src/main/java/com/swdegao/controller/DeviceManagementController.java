@@ -20,26 +20,26 @@ public class DeviceManagementController {
 
 	@Autowired
 	public DeviceManagementService dmService;
-	
+
 	@GetMapping("/regDirectDevice/{nodeId}")
 	public Object regDirectDevice(@PathVariable String nodeId) {
 		Object obj = null;
-		if(nodeId!=null) {
+		if (nodeId != null) {
 			RegDirectDeviceOutDTO rddod = null;
 			try {
 				rddod = dmService.regDirectDevice(nodeId);
-				if(rddod!=null) {
+				if (rddod != null) {
 					obj = JSON.toJSON(rddod);
 				}
 			} catch (NorthApiException e) {
 				obj = e.toString();
 			}
-		}else {
-			obj ="redirect:/error";
+		} else {
+			obj = "redirect:/error";
 		}
 		return obj;
 	}
-	
+
 	@GetMapping("/deleteDirectDevice/{deviceId}")
 	public Object deleteDirectDevice(@PathVariable String deviceId) {
 		Object obj = null;
@@ -51,17 +51,21 @@ public class DeviceManagementController {
 		}
 		return obj;
 	}
-	
-	@RequestMapping(value = "/modifyDeviceInfo", method = { RequestMethod.POST, RequestMethod.GET })  
+
+	/**
+	 * Body: { 
+	 * "name":"****", 
+	 * "deviceId":"",
+	 * "manufacturerName":"",
+	 * "manufacturerId":"",
+	 * "endUser":"****" 
+	 * }
+	 * @param mdiid
+	 * @return
+	 */
+	@RequestMapping(value = "/modifyDeviceInfo", method = { RequestMethod.POST, RequestMethod.GET })
 	public Object modifyDeviceInfo(@RequestBody ModifyDeviceInfoInDTO mdiid) {
 		Object obj = null;
-//		  mdiid.setName("newDeviceName");
-//        mdiid.setDeviceId(deviceId);
-//        mdiid.setManufacturerId("CompanyId");
-//        mdiid.setManufacturerName("CompanyName");
-//        mdiid.setDeviceType("WaterMeter");
-//        mdiid.setModel("SDKDEMO");
-//        mdiid.setProtocolType("CoAP");
 		try {
 			dmService.modifyDeviceInfo(mdiid);
 			obj = "No Content";
@@ -70,9 +74,9 @@ public class DeviceManagementController {
 		}
 		return obj;
 	}
-	
+
 	@GetMapping("/refreshDeviceSecret/{deviceId}&{nodeId}")
-	public Object refreshDeviceSecret(@PathVariable String deviceId,@PathVariable String nodeId) {
+	public Object refreshDeviceSecret(@PathVariable String deviceId, @PathVariable String nodeId) {
 		Object obj = null;
 		RefreshVerifyCodeOutDTO rdsod = null;
 		try {
@@ -83,26 +87,5 @@ public class DeviceManagementController {
 		}
 		return obj;
 	}
-	
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,21 +16,20 @@ import com.huawei.iotplatform.client.dto.QueryDeviceDataOutDTO;
 import com.huawei.iotplatform.client.dto.SubscribeInDTO;
 import com.swdegao.service.DataCollectionService;
 
-
 @RestController
 @RequestMapping(value = "/dataCollection")
 public class DataCollectionController {
-	
+
 	@Autowired
 	public DataCollectionService dcService;
-	
+
 	@GetMapping("/queryDeviceData/{deviceId}")
 	public Object queryDeviceData(@PathVariable String deviceId) {
 		Object obj = null;
 		QueryDeviceDataOutDTO qddod = null;
 		try {
 			qddod = dcService.queryDeviceData(deviceId);
-			if(qddod!=null) {
+			if (qddod != null) {
 				obj = JSON.toJSON(qddod);
 			}
 		} catch (NorthApiException e) {
@@ -37,18 +37,28 @@ public class DataCollectionController {
 		}
 		return obj;
 	}
+
+	/**
+	 * Body: 
+	 * { 
+	 * "notifyType":"deviceInfoChanged",
+	 * "callbackurl":"https://server:port/callbackUri" 
+	 * }
+	 * @param sid
+	 * @throws NorthApiException
+	 */
 	@PostMapping("/subscribeNotify")
-	public void subscribeNotify(SubscribeInDTO sid) throws NorthApiException {
+	public void subscribeNotify(@RequestBody SubscribeInDTO sid) throws NorthApiException {
 		dcService.subscribeNotify(sid);
 	}
-	
+
 	@GetMapping("/queryDataHistory/{deviceId}&{gatewayId}")
-	public Object queryDataHistory(@PathVariable String deviceId,@PathVariable String gatewayId) {
+	public Object queryDataHistory(@PathVariable String deviceId, @PathVariable String gatewayId) {
 		Object obj = null;
 		QueryDataHistoryOutDTO qdhod = null;
 		try {
 			qdhod = dcService.queryDataHistory(deviceId, gatewayId);
-			if(qdhod!=null) {
+			if (qdhod != null) {
 				obj = JSON.toJSON(qdhod);
 			}
 		} catch (NorthApiException e) {
@@ -56,14 +66,14 @@ public class DataCollectionController {
 		}
 		return obj;
 	}
-	
+
 	@GetMapping("/queryDeviceCapabilities/{deviceId}")
 	public Object queryDeviceCapabilities(@PathVariable String deviceId) {
 		Object obj = null;
 		QueryDeviceCapabilitiesOutDTO qdcod = null;
 		try {
 			qdcod = dcService.queryDeviceCapabilities(deviceId);
-			if(qdcod!=null) {
+			if (qdcod != null) {
 				obj = JSON.toJSON(qdcod);
 			}
 		} catch (NorthApiException e) {
@@ -72,15 +82,3 @@ public class DataCollectionController {
 		return obj;
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSON;
@@ -15,14 +16,26 @@ import com.huawei.iotplatform.client.dto.QueryTaskDetailsOutDTO;
 import com.swdegao.service.BatchProcessingService;
 
 @RestController
-@RequestMapping(value="/batch")
+@RequestMapping(value = "/batch")
 public class BatchProcessingController {
 
 	@Autowired
 	public BatchProcessingService bService;
-	
+
+	/**
+	 * Body: 
+	 * { 
+	 * "appId" : "******", 
+	 * "timeout" : 1000, 
+	 * "taskName" : "******",
+	 * "taskType" : "DeviceReg", 
+	 * "param" : { "fileId" : "******" } 
+	 * }
+	 * @param btcid
+	 * @return
+	 */
 	@PostMapping("/createBatchTask")
-	public Object createBatchTask(BatchTaskCreateInDTO btcid) {
+	public Object createBatchTask(@RequestBody BatchTaskCreateInDTO btcid) {
 		Object obj = null;
 		BatchTaskCreateOutDTO bOutDTO = null;
 		try {
@@ -33,6 +46,7 @@ public class BatchProcessingController {
 		}
 		return obj;
 	}
+
 	@GetMapping("/queryOneTask/{taskId}")
 	public Object queryOneTask(@PathVariable String taskId) {
 		Object obj = null;
@@ -45,9 +59,9 @@ public class BatchProcessingController {
 		}
 		return obj;
 	}
-	
+
 	@GetMapping("/queryTaskDetails/{taskId}")
-	public Object  queryTaskDetails(@PathVariable String taskId) {
+	public Object queryTaskDetails(@PathVariable String taskId) {
 		Object obj = null;
 		QueryTaskDetailsOutDTO qOutDTOs = null;
 		try {
@@ -58,19 +72,5 @@ public class BatchProcessingController {
 		}
 		return obj;
 	}
-	
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
