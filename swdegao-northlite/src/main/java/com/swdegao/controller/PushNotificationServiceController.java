@@ -1,5 +1,11 @@
 package com.swdegao.controller;
 
-public class PushNotificationServiceController {
+import com.swdegao.testMessagePush.HttpServer;
 
+public class PushNotificationServiceController {
+	
+	
+	public void messageback() {
+		HttpServer.startServer(8888);
+	}
 }

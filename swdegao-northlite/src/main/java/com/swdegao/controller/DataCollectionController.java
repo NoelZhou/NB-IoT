@@ -30,6 +30,10 @@ public class DataCollectionController {
 	 * "notifyType":"deviceInfoChanged",
 	 * "callbackurl":"https://server:port/callbackUri" 
 	 * }
+	 * 
+	 * notifyType:
+	 * serviceInfoChanged|deviceInfoChanged|LocationChanged|deviceDataChanged|deviceDatasChanged
+     * deviceAdded|deviceDeleted|messageConfirm|commandRsp|deviceEvent|ruleEvent
 	 * @param sid
 	 * @throws NorthApiException
 	 */
