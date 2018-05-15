@@ -1,8 +1,6 @@
 package com.swdegao.quartz.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.CronTrigger;
@@ -145,20 +143,19 @@ public class JobController
 	@GetMapping(value="/queryjob")
 	public Map<String, Object> queryjob(@RequestParam(value="pageNum")Integer pageNum, @RequestParam(value="pageSize")Integer pageSize) 
 	{		
-		System.out.println("234567898765432");
-//		PageInfo<JobAndTrigger> jobAndTrigger = iJobAndTriggerService.getJobAndTriggerDetails(pageNum, pageSize);
+		PageInfo<JobAndTrigger> jobAndTrigger = iJobAndTriggerService.getJobAndTriggerDetails(pageNum, pageSize);
 		Map<String, Object> map = new HashMap<String, Object>();
-		JobAndTrigger jt = new JobAndTrigger();
-		jt.setCRON_EXPRESSION("0/10 * * * * ?");
-		jt.setJOB_CLASS_NAME("com.swdegao.quartz.job.HelloJob");
-		jt.setJOB_GROUP("test");
-		jt.setJOB_NAME("test");
-		jt.setTIME_ZONE_ID("Asia/Shanghai");
-		jt.setTRIGGER_GROUP("test");
-		jt.setTRIGGER_NAME("triggertest");
-		List<JobAndTrigger> li = new ArrayList<JobAndTrigger>();
-		li.add(jt);
-		PageInfo<JobAndTrigger> jobAndTrigger = new PageInfo<JobAndTrigger>(li);
+//		JobAndTrigger jt = new JobAndTrigger();
+//		jt.setCRON_EXPRESSION("0/10 * * * * ?");
+//		jt.setJOB_CLASS_NAME("com.swdegao.quartz.job.HelloJob");
+//		jt.setJOB_GROUP("test");
+//		jt.setJOB_NAME("test");
+//		jt.setTIME_ZONE_ID("Asia/Shanghai");
+//		jt.setTRIGGER_GROUP("test");
+//		jt.setTRIGGER_NAME("triggertest");
+//		List<JobAndTrigger> li = new ArrayList<JobAndTrigger>();
+//		li.add(jt);
+//		PageInfo<JobAndTrigger> jobAndTrigger = new PageInfo<JobAndTrigger>(li);
 		map.put("JobAndTrigger", jobAndTrigger);
 		map.put("number", jobAndTrigger.getTotal());
 		return map;

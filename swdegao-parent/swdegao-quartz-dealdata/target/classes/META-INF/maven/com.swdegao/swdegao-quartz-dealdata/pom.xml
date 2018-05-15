@@ -9,19 +9,9 @@
 		<artifactId>swdegao-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-
 	<artifactId>swdegao-quartz-dealdata</artifactId>
 	<name>swdegao-quartz-dealdata</name>
 	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-quartz</artifactId>
-		</dependency>		
-	    <dependency>
-	    	<groupId>com.github.pagehelper</groupId>
-	   	 	<artifactId>pagehelper</artifactId>
-	    	<version>5.0.0</version>
-		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-quartz</artifactId>
@@ -35,15 +25,21 @@
 			<artifactId>mybatis-spring-boot-starter</artifactId>
 			<version>1.3.2</version>
 		</dependency>
+
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<!-- <scope>runtime</scope> -->
+			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+	    <dependency>
+	    	<groupId>com.github.pagehelper</groupId>
+	   	 	<artifactId>pagehelper</artifactId>
+	    	<version>5.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

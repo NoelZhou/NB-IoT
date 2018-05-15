@@ -5,9 +5,7 @@ spring:
     username: root
     password: 123456
     driver-class-name: com.mysql.jdbc.Driver
-  jpa: 
-    database: mysql 
-      
+#      
 #  jpa:
 #      hibernate:
 #        ddl-auto: create #ddl-auto:设为update表示每次都不会重新建表
@@ -21,7 +19,7 @@ spring:
             instanceName: clusteredScheduler
             instanceId: AUTO         
           dataSource:
-            druid:
+            myDS:
                 URL: jdbc:mysql://localhost:3306/hello_test
                 driver: com.mysql.jdbc.Driver
                 maxConnections: 5
@@ -32,7 +30,7 @@ spring:
             driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
             tablePrefix: QRTZ_
             isClustered: true
-            dataSource: druid
+            dataSource: myDS
             clusterCheckinInterval: 10000
             useProperties: false
           threadPool:
