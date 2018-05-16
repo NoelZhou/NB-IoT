@@ -3,20 +3,22 @@
 <mapper namespace="com.swdegao.quartz.mapper.JobAndTriggerMapper">  
     
     <select id="getJobAndTriggerDetails" resultType="com.swdegao.quartz.entity.JobAndTrigger">
-			SELECT
-				qrtz_job_details.JOB_NAME,
-				qrtz_job_details.JOB_GROUP,
-				qrtz_job_details.JOB_CLASS_NAME,
-				qrtz_triggers.TRIGGER_NAME,
-				qrtz_triggers.TRIGGER_GROUP,
-				qrtz_cron_triggers.CRON_EXPRESSION,
-				qrtz_cron_triggers.TIME_ZONE_ID
-			FROM
-				qrtz_job_details
-			JOIN qrtz_triggers
-			JOIN qrtz_cron_triggers ON qrtz_job_details.JOB_NAME = qrtz_triggers.JOB_NAME
-			AND qrtz_triggers.TRIGGER_NAME = qrtz_cron_triggers.TRIGGER_NAME
-			AND qrtz_triggers.TRIGGER_GROUP = qrtz_cron_triggers.TRIGGER_GROUP
+		SELECT 
+			job.JOB_NAME as jobName,
+			job.JOB_GROUP as jobGroup,
+			job.DESCRIPTION as description,
+			job.JOB_CLASS_NAME as jobClassName,
+			cron.CRON_EXPRESSION as cronExpression,
+			tri.TRIGGER_NAME as triggerName,
+			tri.TRIGGER_STATE as triggerState,
+			job.JOB_NAME as oldJobName,
+			job.JOB_GROUP as oldJobGroup
+		FROM qrtz_job_details AS job 
+		LEFT JOIN qrtz_triggers AS tri ON job.JOB_NAME = tri.JOB_NAME
+		LEFT JOIN qrtz_cron_triggers AS cron ON cron.TRIGGER_NAME = tri.TRIGGER_NAME 
+		WHERE tri.TRIGGER_TYPE = 'CRON'
+		<if test="jobName!=null">
+          and job.JOB_NAME=#{jobName}
+		</if>
     </select>
-    
 </mapper>

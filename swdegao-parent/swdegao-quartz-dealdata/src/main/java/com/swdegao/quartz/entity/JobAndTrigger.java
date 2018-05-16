@@ -1,71 +1,95 @@
 package com.swdegao.quartz.entity;
 
-import java.math.BigInteger;
 
-public class JobAndTrigger {
-	private String JOB_NAME;
-	private String JOB_GROUP;
-	private String JOB_CLASS_NAME;
-	private String TRIGGER_NAME;
-	private String TRIGGER_GROUP;
-	private BigInteger REPEAT_INTERVAL;
-	private BigInteger TIMES_TRIGGERED;
-	private String CRON_EXPRESSION;
-	private String TIME_ZONE_ID;
+/**
+ * 实体类
+ */
+public class JobAndTrigger{
 	
-	public String getJOB_NAME() {
-		return JOB_NAME;
-	}
-	public void setJOB_NAME(String jOB_NAME) {
-		JOB_NAME = jOB_NAME;
-	}
-	public String getJOB_GROUP() {
-		return JOB_GROUP;
-	}
-	public void setJOB_GROUP(String jOB_GROUP) {
-		JOB_GROUP = jOB_GROUP;
-	}
-	public String getJOB_CLASS_NAME() {
-		return JOB_CLASS_NAME;
-	}
-	public void setJOB_CLASS_NAME(String jOB_CLASS_NAME) {
-		JOB_CLASS_NAME = jOB_CLASS_NAME;
-	}
-	public String getTRIGGER_NAME() {
-		return TRIGGER_NAME;
-	}
-	public void setTRIGGER_NAME(String tRIGGER_NAME) {
-		TRIGGER_NAME = tRIGGER_NAME;
-	}
-	public String getTRIGGER_GROUP() {
-		return TRIGGER_GROUP;
-	}
-	public void setTRIGGER_GROUP(String tRIGGER_GROUP) {
-		TRIGGER_GROUP = tRIGGER_GROUP;
-	}
-	public BigInteger getREPEAT_INTERVAL() {
-		return REPEAT_INTERVAL;
-	}
-	public void setREPEAT_INTERVAL(BigInteger rEPEAT_INTERVAL) {
-		REPEAT_INTERVAL = rEPEAT_INTERVAL;
-	}
-	public BigInteger getTIMES_TRIGGERED() {
-		return TIMES_TRIGGERED;
-	}
-	public void setTIMES_TRIGGERED(BigInteger tIMES_TRIGGERED) {
-		TIMES_TRIGGERED = tIMES_TRIGGERED;
-	}
-	public String getCRON_EXPRESSION() {
-		return CRON_EXPRESSION;
-	}
-	public void setCRON_EXPRESSION(String cRON_EXPRESSION) {
-		CRON_EXPRESSION = cRON_EXPRESSION;
-	}
-	public String getTIME_ZONE_ID() {
-		return TIME_ZONE_ID;
-	}
-	public void setTIME_ZONE_ID(String tIME_ZONE_ID) {
-		TIME_ZONE_ID = tIME_ZONE_ID;
-	}
+	private Boolean isInstall;
+	private String jobName;//任务名称
+	private String jobGroup;//任务分组
+	private String description;//任务描述
+	private String jobClassName;//执行类
+	private String cronExpression;//执行时间
+	private String triggerName;//执行时间
+	private String triggerState;//任务状态
 	
+	private String oldJobName;//任务名称 用于修改
+	private String oldJobGroup;//任务分组 用于修改
+	
+	public JobAndTrigger() {
+		super();
+	}
+	public JobAndTrigger(Boolean isInstall,String jobName, String jobGroup, String description, String jobClassName, String cronExpression, String triggerName) {
+		super();
+		this.setIsInstall(isInstall);
+		this.jobName = jobName;
+		this.jobGroup = jobGroup;
+		this.description = description;
+		this.jobClassName = jobClassName;
+		this.cronExpression = cronExpression;
+		this.triggerName = triggerName;
+	}
+
+	public String getJobName() {
+		return jobName;
+	}
+	public void setJobName(String jobName) {
+		this.jobName = jobName;
+	}
+	public String getJobGroup() {
+		return jobGroup;
+	}
+	public void setJobGroup(String jobGroup) {
+		this.jobGroup = jobGroup;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	public String getJobClassName() {
+		return jobClassName;
+	}
+	public void setJobClassName(String jobClassName) {
+		this.jobClassName = jobClassName;
+	}
+	public String getCronExpression() {
+		return cronExpression;
+	}
+	public void setCronExpression(String cronExpression) {
+		this.cronExpression = cronExpression;
+	}
+	public String getTriggerName() {
+		return triggerName;
+	}
+	public void setTriggerName(String triggerName) {
+		this.triggerName = triggerName;
+	}
+	public String getTriggerState() {
+		return triggerState;
+	}
+	public void setTriggerState(String triggerState) {
+		this.triggerState = triggerState;
+	}
+	public String getOldJobName() {
+		return oldJobName;
+	}
+	public void setOldJobName(String oldJobName) {
+		this.oldJobName = oldJobName;
+	}
+	public String getOldJobGroup() {
+		return oldJobGroup;
+	}
+	public void setOldJobGroup(String oldJobGroup) {
+		this.oldJobGroup = oldJobGroup;
+	}
+	public Boolean getIsInstall() {
+		return isInstall;
+	}
+	public void setIsInstall(Boolean isInstall) {
+		this.isInstall = isInstall;
+	}
 }

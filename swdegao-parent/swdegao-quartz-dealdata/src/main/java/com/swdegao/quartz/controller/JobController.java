@@ -1,175 +1,149 @@
 package com.swdegao.quartz.controller;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import javax.servlet.http.HttpServletResponse;
 import org.quartz.CronScheduleBuilder;
-import org.quartz.CronTrigger;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
 import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
+import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.TriggerKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.github.pagehelper.PageInfo;
 import com.swdegao.quartz.entity.JobAndTrigger;
+import com.swdegao.quartz.entity.Result;
 import com.swdegao.quartz.job.BaseJob;
 import com.swdegao.quartz.service.IJobAndTriggerService;
-
+import com.swdegao.quartz.utils.ClassUtil;
 
 @RestController
-@RequestMapping(value="/job")
-public class JobController 
-{
-	@Autowired
-	private IJobAndTriggerService iJobAndTriggerService;
-	
-	//加入Qulifier注解，通过名称注入bean
-	@Autowired @Qualifier("Scheduler")
-	private Scheduler scheduler;
-	
-	private static Logger log = LoggerFactory.getLogger(JobController.class);  
+@RequestMapping("/job")
+@SuppressWarnings({ "unchecked", "rawtypes" })
+public class JobController {
+	private final static Logger LOGGER = LoggerFactory.getLogger(JobController.class);
 	
 
-	@PostMapping(value="/addjob")
-	public void addjob(@RequestParam(value="jobClassName")String jobClassName, 
-			@RequestParam(value="jobGroupName")String jobGroupName, 
-			@RequestParam(value="cronExpression")String cronExpression) throws Exception
-	{			
-		addJob(jobClassName, jobGroupName, cronExpression);
-	}
+    @Autowired
+    private Scheduler scheduler;
+    @Autowired
+    private IJobAndTriggerService iJobService;
+    
 	
-	public void addJob(String jobClassName, String jobGroupName, String cronExpression)throws Exception{
-        log.info("添加job");
-        // 启动调度器  
-		scheduler.start(); 
-		
-		//构建job信息
-		JobDetail jobDetail = JobBuilder.newJob(getClass(jobClassName).getClass()).withIdentity(jobClassName, jobGroupName).build();
-		
-		//表达式调度构建器(即任务执行的时间)
-        CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpression);
-
-        //按新的cronExpression表达式构建一个新的trigger
-        CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity(jobClassName, jobGroupName)
-            .withSchedule(scheduleBuilder).build();
-        
-        try {
-        	scheduler.scheduleJob(jobDetail, trigger);
-            
-        } catch (SchedulerException e) {
-            System.out.println("创建定时任务失败"+e);
-            throw new Exception("创建定时任务失败");
-        }
-	}
-
-
-	@PostMapping(value="/pausejob")
-	public void pausejob(@RequestParam(value="jobClassName")String jobClassName, @RequestParam(value="jobGroupName")String jobGroupName) throws Exception
-	{			
-		jobPause(jobClassName, jobGroupName);
-	}
-	
-	public void jobPause(String jobClassName, String jobGroupName) throws Exception
-	{	
-		scheduler.pauseJob(JobKey.jobKey(jobClassName, jobGroupName));
-	}
-	
-
-	@PostMapping(value="/resumejob")
-	public void resumejob(@RequestParam(value="jobClassName")String jobClassName, @RequestParam(value="jobGroupName")String jobGroupName) throws Exception
-	{			
-		jobresume(jobClassName, jobGroupName);
-	}
-	
-	public void jobresume(String jobClassName, String jobGroupName) throws Exception
-	{
-		scheduler.resumeJob(JobKey.jobKey(jobClassName, jobGroupName));
-	}
-	
-	
-	@PostMapping(value="/reschedulejob")
-	public void rescheduleJob(@RequestParam(value="jobClassName")String jobClassName, 
-			@RequestParam(value="jobGroupName")String jobGroupName,
-			@RequestParam(value="cronExpression")String cronExpression) throws Exception
-	{			
-		jobreschedule(jobClassName, jobGroupName, cronExpression);
-	}
-	
-	public void jobreschedule(String jobClassName, String jobGroupName, String cronExpression) throws Exception
-	{				
+	@PostMapping("/add")
+	public Result save(JobAndTrigger jobAndTri){
+		LOGGER.info("新增任务");
 		try {
-			TriggerKey triggerKey = TriggerKey.triggerKey(jobClassName, jobGroupName);
-			// 表达式调度构建器
-			CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpression);
-
-			CronTrigger trigger = (CronTrigger) scheduler.getTrigger(triggerKey);
-
-			// 按新的cronExpression表达式重新构建trigger
-			trigger = trigger.getTriggerBuilder().withIdentity(triggerKey).withSchedule(scheduleBuilder).build();
-
-			// 按新的trigger重新设置job执行
-			scheduler.rescheduleJob(triggerKey, trigger);
-		} catch (SchedulerException e) {
-			System.out.println("更新定时任务失败"+e);
-			throw new Exception("更新定时任务失败");
+			//获取Scheduler实例、废弃、使用自动注入的scheduler、否则spring的service将无法注入
+	        //Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
+	        //如果是修改  展示旧的 任务
+	        if(jobAndTri.getOldJobGroup()!=null){
+	        	JobKey key = new JobKey(jobAndTri.getOldJobName(),jobAndTri.getOldJobGroup());
+	        	scheduler.deleteJob(key);
+	        }
+	        Class cls = Class.forName(jobAndTri.getJobClassName()) ;
+	        cls.newInstance();
+	        //构建job信息
+	        JobDetail job = JobBuilder.newJob(cls).withIdentity(jobAndTri.getJobName(),
+	        		jobAndTri.getJobGroup())
+	        		.withDescription(jobAndTri.getDescription()).build();
+	        // 触发时间点
+	        CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule(jobAndTri.getCronExpression());
+	        Trigger trigger = TriggerBuilder.newTrigger().withIdentity("trigger"+jobAndTri.getJobName(), jobAndTri.getJobGroup())
+	                .startNow().withSchedule(cronScheduleBuilder).build();	
+	        //交由Scheduler安排触发
+	        scheduler.scheduleJob(job, trigger);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Result.error();
 		}
+		return Result.ok();
 	}
-	
-	
-	@PostMapping(value="/deletejob")
-	public void deletejob(@RequestParam(value="jobClassName")String jobClassName, @RequestParam(value="jobGroupName")String jobGroupName) throws Exception
-	{			
-		jobdelete(jobClassName, jobGroupName);
+	@PostMapping("/list")
+	public Result list(JobAndTrigger jobAndTri,Integer pageNo,Integer pageSize) throws ClassNotFoundException, InstantiationException, IllegalAccessException{
+		LOGGER.info("任务列表");
+		PageInfo<JobAndTrigger> pInfo = iJobService.getJobAndTriggerDetails(jobAndTri,pageNo, pageSize);
+		List<JobAndTrigger> list = pInfo.getList();
+		List<JobAndTrigger> resultList = new ArrayList<>();
+		List<Class> classes = ClassUtil.getAllClassByInterface(Class.forName("com.swdegao.quartz.job.BaseJob"));  
+//        classes.forEach(clas -> System.out.println(clas.getName()));
+		for (Class clas :classes) {
+			BaseJob baseJob = (BaseJob) clas.newInstance();
+			if(jobAndTri.getJobName()!=null&&!jobAndTri.getJobName().equals(baseJob.Name())) {
+				continue;//如果没有匹配的jobname，跳到下一步循环
+			}
+			Optional<JobAndTrigger> opt = list.stream().filter(job -> job.getJobClassName().equals(clas.getName())).findFirst();
+			JobAndTrigger jobTemp = null;
+			if(opt.isPresent()) {
+				jobTemp = opt.get();
+				jobTemp.setIsInstall(true);
+			}else {
+				jobTemp=new JobAndTrigger(false,baseJob.Name(), baseJob.GroupName(), baseJob.Description(), clas.getName(), null, null);
+			}
+			resultList.add(jobTemp);
+        } 
+		return Result.ok(resultList);
 	}
-	
-	public void jobdelete(String jobClassName, String jobGroupName) throws Exception
-	{		
-		scheduler.pauseTrigger(TriggerKey.triggerKey(jobClassName, jobGroupName));
-		scheduler.unscheduleJob(TriggerKey.triggerKey(jobClassName, jobGroupName));
-		scheduler.deleteJob(JobKey.jobKey(jobClassName, jobGroupName));				
+	@PostMapping("/trigger")
+	public  Result trigger(JobAndTrigger jobAndTri,HttpServletResponse response) {
+		try {
+		     JobKey key = new JobKey(jobAndTri.getJobName(),jobAndTri.getJobGroup());
+		     scheduler.triggerJob(key);
+		} catch (SchedulerException e) {
+			 e.printStackTrace();
+			 return Result.error();
+		}
+		return Result.ok();
 	}
-	
-	
-	@GetMapping(value="/queryjob")
-	public Map<String, Object> queryjob(@RequestParam(value="pageNum")Integer pageNum, @RequestParam(value="pageSize")Integer pageSize) 
-	{		
-		PageInfo<JobAndTrigger> jobAndTrigger = iJobAndTriggerService.getJobAndTriggerDetails(pageNum, pageSize);
-		Map<String, Object> map = new HashMap<String, Object>();
-//		JobAndTrigger jt = new JobAndTrigger();
-//		jt.setCRON_EXPRESSION("0/10 * * * * ?");
-//		jt.setJOB_CLASS_NAME("com.swdegao.quartz.job.HelloJob");
-//		jt.setJOB_GROUP("test");
-//		jt.setJOB_NAME("test");
-//		jt.setTIME_ZONE_ID("Asia/Shanghai");
-//		jt.setTRIGGER_GROUP("test");
-//		jt.setTRIGGER_NAME("triggertest");
-//		List<JobAndTrigger> li = new ArrayList<JobAndTrigger>();
-//		li.add(jt);
-//		PageInfo<JobAndTrigger> jobAndTrigger = new PageInfo<JobAndTrigger>(li);
-		map.put("JobAndTrigger", jobAndTrigger);
-		map.put("number", jobAndTrigger.getTotal());
-		return map;
+	@PostMapping("/pause")
+	public  Result pause(JobAndTrigger jobAndTri,HttpServletResponse response) {
+		LOGGER.info("停止任务");
+		try {
+		     JobKey key = new JobKey(jobAndTri.getJobName(),jobAndTri.getJobGroup());
+		     scheduler.pauseJob(key);
+		} catch (SchedulerException e) {
+			 e.printStackTrace();
+			 return Result.error();
+		}
+		return Result.ok();
 	}
-	@GetMapping("/hello")
-	public String hello() {
-		return "Hello World!!!";
+	@PostMapping("/resume")
+	public  Result resume(JobAndTrigger jobAndTri,HttpServletResponse response) {
+		LOGGER.info("恢复任务");
+		try {
+		     JobKey key = new JobKey(jobAndTri.getJobName(),jobAndTri.getJobGroup());
+		     scheduler.resumeJob(key);
+		} catch (SchedulerException e) {
+			 e.printStackTrace();
+			 return Result.error();
+		}
+		return Result.ok();
 	}
-	
-	public static BaseJob getClass(String classname) throws Exception 
-	{
-		Class<?> class1 = Class.forName(classname);
-		return (BaseJob)class1.newInstance();
+	@PostMapping("/remove")
+	public  Result remove(JobAndTrigger jobAndTri,HttpServletResponse response) {
+		try {  
+			  
+            TriggerKey triggerKey = TriggerKey.triggerKey(jobAndTri.getJobName(), jobAndTri.getJobGroup());  
+            // 停止触发器  
+            scheduler.pauseTrigger(triggerKey);  
+            // 移除触发器  
+            scheduler.unscheduleJob(triggerKey);  
+            // 删除任务  
+            scheduler.deleteJob(JobKey.jobKey(jobAndTri.getJobName(), jobAndTri.getJobGroup()));  
+            System.out.println("removeJob:"+JobKey.jobKey(jobAndTri.getJobName()));  
+        } catch (Exception e) {  
+        	e.printStackTrace();
+            return Result.error();
+        }  
+		return Result.ok();
 	}
-	
-	
 }
