@@ -33,7 +33,7 @@ spring:
       org:
         quartz:
           scheduler:
-            instanceName: clusteredScheduler
+            instanceName: DealDataScheduler
             instanceId: AUTO         
 #          dataSource:
 #            myDS:

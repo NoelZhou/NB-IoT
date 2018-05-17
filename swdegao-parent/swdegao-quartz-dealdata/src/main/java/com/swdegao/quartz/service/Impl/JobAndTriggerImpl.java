@@ -24,4 +24,10 @@ public class JobAndTriggerImpl implements IJobAndTriggerService{
 		return page;
 	}
 
+	@Override
+	public void updateTriggerOnceState(JobAndTrigger jobAndTri) {
+		jobAndTriggerMapper.updateTriggerOnceState(jobAndTri);
+		
+	}
+
 }

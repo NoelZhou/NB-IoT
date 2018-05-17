@@ -27,7 +27,7 @@
 		</div>
 		<div style="margin-bottom: 6px;margin: 30px">
 			<template> 
-				<i-table border :content="self" :columns="tableTitle" :data="JobData"></i-table>
+				<i-table  stripe border :content="self" :columns="tableTitle" :data="JobData"></i-table>
 			 	<br>
 			 	<!-- 待实现分页功能 -->
 				<!-- <Page :current="teacher.pageNumber" :total="tableSize" :page-size="pageSize"  @on-change="changePage" @on-page-size-change="changePageSize" show-elevator show-sizer show-total></Page> --> 
@@ -49,20 +49,63 @@ var vm = new Vue({
 		}, {
 			key : "jobGroup",
 			title : "任务分组"
-		}, {
+		}, /* {
+			key : "displayName",
+			title : "任务中文名称"
+		},  */{
 			key : "description",
-			title : "描述"
+			/* ellipsis : true, */
+			title : "计划任务描述"
 		}, {
+			key : "cronVersion",
+			align : 'center',
+			width : 70,
+			title : "版本"
+		}, {
+			key : "author",
+			align : 'center',
+			width : 120,
+			title : "插件作者"
+		},  {
+			key : "trigger_state",
+			title : "是否启用",
+			width : 90,
+			align : 'center',
+			render : function(h, params) {
+				return (params.row.triggerState=="PAUSED"|| params.row.triggerState == null) ? 
+						h('div',{style:{color:'red'}},'停用') : 
+							h('div',{style:{color:'green'}},'启用');
+			}
+		},  {
 			key : "jobClassName",
-			title : "执行类"
+			title : "执行类",
+			width : 300,
 		}, {
-			key : "cronExpression",
-			title : "执行时间"
+			key : "prevFireTime",
+			width : 150,
+			align : 'center',
+			title : "上次执行时间"
+		},   {
+			key : "triggerOnceState",
+			width : 90,
+			title : "上次执行状态",
+			align : 'center',
+			render : function(h, params) {
+				return (params.row.triggerOnceState=="ERROR"|| params.row.triggerOnceState == "") ? 
+						h('div',{style:{color:'red'}},'失败') : 
+							h('div',{style:{color:'green'}},'成功');
+			}
+
+		},  {
+			key : "nextFireTime",
+			width : 150,
+			align : 'center',
+			title : "下次执行时间"
 		}, {
 			title : '操作',
 			key : 'action',
 			width : 300,
-			align : 'left',
+			align : 'center',
 			render : function(h, params) {
 				var functionList = [];
 				if(!params.row.isInstall){
@@ -71,7 +114,7 @@ var vm = new Vue({
 						props : {
 							type : 'primary',
 							size : 'small',
-							icon : 'edit'
+							icon : 'plus'
 						},
 						style : {
 							marginRight : '8px'
@@ -218,7 +261,12 @@ var vm = new Vue({
 						vm.$Notice.success({
 		                    desc:  '任务执行成功'
 		                });
+					}else{
+						vm.$Notice.error({
+		                    desc:  '任务执行失败'
+		                });
 					}
+					vm.list();
 				}
 			});
 		},

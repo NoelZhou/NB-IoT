@@ -25,19 +25,20 @@ import com.swdegao.quartz.entity.Result;
 import com.swdegao.quartz.job.BaseJob;
 import com.swdegao.quartz.service.IJobAndTriggerService;
 import com.swdegao.quartz.utils.ClassUtil;
+import com.swdegao.quartz.utils.DateUtil;
 
 @RestController
 @RequestMapping("/job")
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class JobController {
-	private final static Logger LOGGER = LoggerFactory.getLogger(JobController.class);
 	
+	private final static Logger LOGGER = LoggerFactory.getLogger(JobController.class);
 
     @Autowired
     private Scheduler scheduler;
+    
     @Autowired
     private IJobAndTriggerService iJobService;
-    
 	
 	@PostMapping("/add")
 	public Result save(JobAndTrigger jobAndTri){
@@ -68,6 +69,7 @@ public class JobController {
 		}
 		return Result.ok();
 	}
+	
 	@PostMapping("/list")
 	public Result list(JobAndTrigger jobAndTri,Integer pageNo,Integer pageSize) throws ClassNotFoundException, InstantiationException, IllegalAccessException{
 		LOGGER.info("任务列表");
@@ -78,7 +80,7 @@ public class JobController {
 //        classes.forEach(clas -> System.out.println(clas.getName()));
 		for (Class clas :classes) {
 			BaseJob baseJob = (BaseJob) clas.newInstance();
-			if(jobAndTri.getJobName()!=null&&!jobAndTri.getJobName().equals(baseJob.Name())) {
+			if(jobAndTri.getJobName()!=null&&!jobAndTri.getJobName().equals(baseJob.getJobName())) {
 				continue;//如果没有匹配的jobname，跳到下一步循环
 			}
 			Optional<JobAndTrigger> opt = list.stream().filter(job -> job.getJobClassName().equals(clas.getName())).findFirst();
@@ -86,13 +88,18 @@ public class JobController {
 			if(opt.isPresent()) {
 				jobTemp = opt.get();
 				jobTemp.setIsInstall(true);
+				jobTemp.setPrevFireTime(DateUtil.timeStamp2Date(String.valueOf(Long.parseLong(jobTemp.getPrevFireTime())/1000), null));
+				jobTemp.setNextFireTime(DateUtil.timeStamp2Date(String.valueOf(Long.parseLong(jobTemp.getNextFireTime())/1000), null));
+				jobTemp.setCronVersion(baseJob.getCronVersion());
+				jobTemp.setAuthor(baseJob.getAuthor());
 			}else {
-				jobTemp=new JobAndTrigger(false,baseJob.Name(), baseJob.GroupName(), baseJob.Description(), clas.getName(), null, null);
+				jobTemp=new JobAndTrigger(false,baseJob,clas.getName());
 			}
 			resultList.add(jobTemp);
         } 
 		return Result.ok(resultList);
 	}
+	
 	@PostMapping("/trigger")
 	public  Result trigger(JobAndTrigger jobAndTri,HttpServletResponse response) {
 		try {
@@ -104,6 +111,7 @@ public class JobController {
 		}
 		return Result.ok();
 	}
+	
 	@PostMapping("/pause")
 	public  Result pause(JobAndTrigger jobAndTri,HttpServletResponse response) {
 		LOGGER.info("停止任务");
@@ -116,6 +124,7 @@ public class JobController {
 		}
 		return Result.ok();
 	}
+	
 	@PostMapping("/resume")
 	public  Result resume(JobAndTrigger jobAndTri,HttpServletResponse response) {
 		LOGGER.info("恢复任务");
@@ -128,10 +137,10 @@ public class JobController {
 		}
 		return Result.ok();
 	}
+	
 	@PostMapping("/remove")
 	public  Result remove(JobAndTrigger jobAndTri,HttpServletResponse response) {
 		try {  
-			  
             TriggerKey triggerKey = TriggerKey.triggerKey(jobAndTri.getJobName(), jobAndTri.getJobGroup());  
             // 停止触发器  
             scheduler.pauseTrigger(triggerKey);  

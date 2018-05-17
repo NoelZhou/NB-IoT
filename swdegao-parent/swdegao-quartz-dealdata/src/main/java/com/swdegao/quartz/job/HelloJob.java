@@ -1,84 +1,80 @@
 package com.swdegao.quartz.job;
 
-import java.util.Date;  
+import java.util.Date;
+import java.util.Random;
+
 import org.slf4j.Logger;  
-import org.slf4j.LoggerFactory;   
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.swdegao.quartz.entity.JobAndTrigger;
+import com.swdegao.quartz.service.IJobAndTriggerService;
+
 import org.quartz.JobExecutionContext;  
 import org.quartz.JobExecutionException;  
   
 public class HelloJob implements BaseJob {  
-  
+	@Autowired
+    private IJobAndTriggerService iJobService;
     private static Logger _log = LoggerFactory.getLogger(HelloJob.class);  
     
-    private String jobName= "Devices";
-	private String jobGroup= "DevicesGroup";
-	private String description= "数据解析";
-	private String cronExpression;
-	private String triggerName;
-	private String triggerState;
-	
-	
-//    this._name = "RealTimeDataForDevices";
-//    this._displayName = "指定终端设备数据解析任务";
-//    this._groupName = "RealTimeDataForDevicesGroup";
-//    this._description = "处理指定终端设备的数据解析";
-//    this._cronVersion = "1.0";
-//    this._author = "DeGao Team";
-     
+    private static final String jobName= "HelloJob";
+    private static final String displayName= "";
+	private static final String jobGroupName= "HelloJobGroup";
+	private static final String description= "分发数据对接翠亨水务远程抄表系统";
+	private static final String cronVersion = "1.0";
+	private static final String author = "DeGao Team";
+
     public void execute(JobExecutionContext context)  
         throws JobExecutionException {  
-        _log.error("Hello Job执行时间: " + new Date());  
-          
+        _log.error("Hello Job 执行时间: " + new Date());  
+        Random random = new Random();
+        int num = random.nextInt();
+        System.out.println(num);
+        if(num%2 == 0) {
+        	 iJobService.updateTriggerOnceState(new JobAndTrigger("SUCCESS", jobName, jobGroupName));
+        }else {
+        	iJobService.updateTriggerOnceState(new JobAndTrigger("ERROR", jobName, jobGroupName));
+		}
+       
     }
 
 
-	public String getJobName() {return jobName;}
-
-	public String getJobGroup() {return this.jobGroup;}
-
-	public String getDescription() {return description;}
-
-	public String getCronExpression() {return this.cronExpression;}
-
-	public String getTriggerName() {return this.triggerName;}
-
-	public String getTriggerState() {return this.triggerState;}
-
 
 	@Override
-	public String Name() {
-		return this.jobName;
+	public String getJobName() {
+		return jobName;
 	}
 
 	@Override
-	public String DisplayName() {
+	public String getDisplayName() {
 		// TODO Auto-generated method stub
-		return null;
+		return displayName;
 	}
 
 
 	@Override
-	public String GroupName() {
-		return this.jobGroup;
+	public String getGroupName() {
+		return jobGroupName;
 	}
 
 
 	@Override
-	public String Description() {
+	public String getDescription() {
 		return description;
 	}
 
 
 	@Override
-	public String CronVersion() {
+	public String getCronVersion() {
 		// TODO Auto-generated method stub
-		return null;
+		return cronVersion;
 	}
 
 
 	@Override
-	public String Author() {
+	public String getAuthor() {
 		// TODO Auto-generated method stub
-		return null;
+		return author;
 	}  
 }  

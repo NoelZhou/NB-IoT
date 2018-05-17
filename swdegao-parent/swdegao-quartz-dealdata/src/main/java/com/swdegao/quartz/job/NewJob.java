@@ -9,61 +9,55 @@ import org.quartz.JobExecutionException;
 public class NewJob implements BaseJob {  
   
     private static Logger _log = LoggerFactory.getLogger(NewJob.class);  
-    private String jobName= "RealTimeDataForDevices";
-	private String jobGroup= "RealTimeDataForDevicesGroup";
-	private String description= "处理指定终端设备的数据解析";
-	private String cronExpression;
-	private String triggerName;
-	private String triggerState;
-	
-	
-//    this._name = "RealTimeDataForDevices";
-//    this._displayName = "指定终端设备数据解析任务";
-//    this._groupName = "RealTimeDataForDevicesGroup";
-//    this._description = "处理指定终端设备的数据解析";
-//    this._cronVersion = "1.0";
-//    this._author = "DeGao Team";
-     
+    private static final String jobName= "NewJobData";
+    private static final String displayName= "";
+	private static final String jobGroupName= "NewJobDataGroup";
+	private static final String description= "分发数据对接翠亨水务远程抄表系统";
+	private static final String cronVersion = "1.0";
+	private static final String author = "DeGao Team";
+
     public void execute(JobExecutionContext context)  
         throws JobExecutionException {  
-        _log.error("New Job执行时间: " + new Date());  
+        _log.error("New Job 执行时间: " + new Date());  
           
     }
 
+
+
 	@Override
-	public String Name() {
-		return this.jobName;
+	public String getJobName() {
+		return jobName;
 	}
 
 	@Override
-	public String DisplayName() {
+	public String getDisplayName() {
 		// TODO Auto-generated method stub
-		return null;
+		return displayName;
 	}
 
 
 	@Override
-	public String GroupName() {
-		return this.jobGroup;
+	public String getGroupName() {
+		return jobGroupName;
 	}
 
 
 	@Override
-	public String Description() {
+	public String getDescription() {
 		return description;
 	}
 
 
 	@Override
-	public String CronVersion() {
+	public String getCronVersion() {
 		// TODO Auto-generated method stub
-		return null;
+		return cronVersion;
 	}
 
 
 	@Override
-	public String Author() {
+	public String getAuthor() {
 		// TODO Auto-generated method stub
-		return null;
+		return author;
 	}  
 }  

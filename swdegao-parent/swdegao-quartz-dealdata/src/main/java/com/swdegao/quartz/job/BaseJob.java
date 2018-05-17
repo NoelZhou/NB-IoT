@@ -7,12 +7,12 @@ import org.quartz.JobExecutionException;
 public interface BaseJob extends Job{
 	
 	
-	public String Name();
-	public String DisplayName(); 
-	public String GroupName();  
-	public String Description(); 
-	public String CronVersion();  
-	public String Author(); 
+	public String getJobName();
+	public String getDisplayName(); 
+	public String getGroupName();  
+	public String getDescription(); 
+	public String getCronVersion();  
+	public String getAuthor(); 
     
 	public void execute(JobExecutionContext context) throws JobExecutionException;
 }

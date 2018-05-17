@@ -14,4 +14,9 @@ public interface IJobAndTriggerService {
 		 * @return
 		 */
 		public PageInfo<JobAndTrigger> getJobAndTriggerDetails(JobAndTrigger jobAndTri, int pageNum, int pageSize);
+		/**
+		 * 更新上次执行状态
+		 * @param triggerOnceState
+		 */
+		public void updateTriggerOnceState(JobAndTrigger jobAndTri);
 }
